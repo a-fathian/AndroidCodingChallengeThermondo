@@ -4,11 +4,9 @@ import ali.fathian.data.common.Constants.BASE_URL
 import ali.fathian.data.remote.api.ApiService
 import ali.fathian.data.repository.DefaultLaunchRepository
 import ali.fathian.domain.LaunchRepository
-import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -31,7 +29,6 @@ object NetworkModule {
     @Singleton
     fun provideOkHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
-        @ApplicationContext context: Context
     ): OkHttpClient {
         val okHttpClient = OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)
@@ -59,4 +56,5 @@ object NetworkModule {
     fun provideLaunchRepository(apiService: ApiService): LaunchRepository {
         return DefaultLaunchRepository(apiService)
     }
+
 }
