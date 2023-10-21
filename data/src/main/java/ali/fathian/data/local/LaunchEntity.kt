@@ -1,6 +1,10 @@
-package ali.fathian.domain.model
+package ali.fathian.data.local
 
-data class DomainLaunchModel(
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "launches")
+data class LaunchEntity(
     val image: String? = null,
     val name: String? = null,
     val date: String? = null,
@@ -8,6 +12,6 @@ data class DomainLaunchModel(
     val details: String? = null,
     val upcoming: Boolean = false,
     val success: Boolean = false,
-    val bookmarked: Boolean = false,
-    val id: String? = null
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0
 )

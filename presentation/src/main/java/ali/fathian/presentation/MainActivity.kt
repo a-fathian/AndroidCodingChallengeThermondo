@@ -7,10 +7,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,14 +18,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AndroidCodingChallengeTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    LaunchList(viewModel.uiState.value) {
-                        viewModel.fetchLaunches()
-                    }
-                }
+                LaunchList(
+                    viewModel.uiState.value,
+                    viewModel.bookmarks.value ?: emptyList(),
+                    onRetryClick = viewModel::fetchLaunches,
+                    onItemClick = viewModel::onItemClick,
+                    onBookmarkClicked = viewModel::onBookmarkClicked
+                )
             }
         }
     }
@@ -37,5 +32,6 @@ class MainActivity : ComponentActivity() {
     override fun onStart() {
         super.onStart()
         viewModel.fetchLaunches()
+        viewModel.fetchBookmarks()
     }
 }

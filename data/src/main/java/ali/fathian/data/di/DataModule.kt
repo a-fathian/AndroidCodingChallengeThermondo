@@ -1,12 +1,17 @@
 package ali.fathian.data.di
 
 import ali.fathian.data.common.Constants.BASE_URL
+import ali.fathian.data.local.LaunchDao
+import ali.fathian.data.local.LaunchDatabase
 import ali.fathian.data.remote.api.ApiService
 import ali.fathian.data.repository.DefaultLaunchRepository
 import ali.fathian.domain.repository.LaunchRepository
+import android.content.Context
+import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -17,7 +22,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object NetworkModule {
+object DataModule {
 
     @Singleton
     @Provides
@@ -53,8 +58,23 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideLaunchRepository(apiService: ApiService): LaunchRepository {
-        return DefaultLaunchRepository(apiService)
+    fun provideLaunchRepository(apiService: ApiService, launchDao: LaunchDao): LaunchRepository {
+        return DefaultLaunchRepository(apiService, launchDao)
     }
 
+    @Singleton
+    @Provides
+    fun provideLaunchDatabase(
+        @ApplicationContext context: Context
+    ): LaunchDatabase {
+        return Room.databaseBuilder(
+            context,
+            LaunchDatabase::class.java,
+            "launchDatabase"
+        ).build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideLaunchDao(launchDatabase: LaunchDatabase) = launchDatabase.launchDao()
 }

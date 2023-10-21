@@ -2,7 +2,9 @@ package ali.fathian.presentation.ui
 
 import ali.fathian.presentation.R
 import ali.fathian.presentation.model.Launches
+import ali.fathian.presentation.model.Origin
 import ali.fathian.presentation.model.UiModel
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -10,27 +12,126 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 
 @Composable
-fun LaunchList(launches: Launches, onRetryClick: () -> Unit) {
+fun LaunchList(
+    launches: Launches,
+    bookmarks: List<UiModel>,
+    onRetryClick: () -> Unit,
+    onItemClick: (UiModel, Origin) -> Unit,
+    onBookmarkClicked: (UiModel) -> Unit
+) {
+    var selectedBottomBarIndex by remember {
+        mutableStateOf(0)
+    }
+    val bottomBarItems = listOf("Launches", "Bookmarks")
+    val navController = rememberNavController()
+    Scaffold(
+        bottomBar = {
+            NavigationBar() {
+                bottomBarItems.forEachIndexed { index, item ->
+                    NavigationBarItem(
+                        selected = selectedBottomBarIndex == index,
+                        onClick = {
+                            if (index == 0) {
+                                navController.navigate(route = Screens.LaunchListScreen.route)
+                            } else {
+                                navController.navigate(route = Screens.BookmarksScreen.route)
+                            }
+                            selectedBottomBarIndex = index
+                        },
+                        icon = {
+                            Icon(imageVector = Icons.Default.Home, contentDescription = "Launches")
+                        },
+                        label = {
+                            Text(text = item)
+                        }
+                    )
+                }
+            }
+        }
+    ) { paddingValues ->
+        NavHost(navController = navController, startDestination = Screens.LaunchListScreen.route) {
+            composable(route = Screens.LaunchListScreen.route) {
+                Home(
+                    paddingValues = paddingValues,
+                    launches = launches,
+                    onRetryClick = onRetryClick,
+                    onItemClick = onItemClick,
+                    onBookmarkClicked = onBookmarkClicked
+                )
+            }
+            composable(route = Screens.BookmarksScreen.route) {
+                Bookmarks(
+                    paddingValues = paddingValues,
+                    bookmarks = bookmarks,
+                    onItemClick = onItemClick,
+                    onBookmarkClicked = onBookmarkClicked
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun Bookmarks(
+    paddingValues: PaddingValues,
+    bookmarks: List<UiModel>,
+    onItemClick: (UiModel, Origin) -> Unit,
+    onBookmarkClicked: (UiModel) -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize().padding(bottom = paddingValues.calculateBottomPadding()),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(all = 8.dp)
+    ) {
+        items(bookmarks) { uiModel ->
+            LaunchItem(
+                uiModel = uiModel,
+                onItemClick = onItemClick,
+                onBookmarkClicked = onBookmarkClicked,
+                origin = Origin.BookmarkLaunches
+            )
+        }
+    }
+}
+
+@Composable
+private fun Home(
+    paddingValues: PaddingValues,
+    launches: Launches,
+    onRetryClick: () -> Unit,
+    onItemClick: (UiModel, Origin) -> Unit,
+    onBookmarkClicked: (UiModel) -> Unit
+) {
     val tabItems = listOf("All", "Upcoming", "Past")
     var selectedTabIndex by remember {
         mutableStateOf(0)
     }
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues)
+    ) {
         if (launches.loading) {
             Loading()
         } else if (launches.errorMessage.isNotEmpty()) {
@@ -49,9 +150,26 @@ fun LaunchList(launches: Launches, onRetryClick: () -> Unit) {
                 }
             }
             when (selectedTabIndex) {
-                0 -> LaunchesUi(launches = launches.allLaunches)
-                1 -> LaunchesUi(launches = launches.upcomingLaunches)
-                2 -> LaunchesUi(launches = launches.pastLaunches)
+                0 -> LaunchesUi(
+                    launches = launches.allLaunches,
+                    onItemClick = onItemClick,
+                    onBookmarkClicked = onBookmarkClicked,
+                    origin = Origin.AllLaunches
+                )
+
+                1 -> LaunchesUi(
+                    launches = launches.upcomingLaunches,
+                    onItemClick = onItemClick,
+                    onBookmarkClicked = onBookmarkClicked,
+                    origin = Origin.UpcomingLaunches
+                )
+
+                2 -> LaunchesUi(
+                    launches = launches.pastLaunches,
+                    onItemClick = onItemClick,
+                    onBookmarkClicked = onBookmarkClicked,
+                    origin = Origin.PastLaunches
+                )
             }
         }
     }
@@ -60,84 +178,117 @@ fun LaunchList(launches: Launches, onRetryClick: () -> Unit) {
 @Composable
 fun LaunchItem(
     uiModel: UiModel,
-    onItemClick: (UiModel) -> Unit
+    onItemClick: (UiModel, Origin) -> Unit,
+    onBookmarkClicked: (UiModel) -> Unit,
+    origin: Origin
 ) {
-    Row(
+    Column(
         modifier = Modifier
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .fillMaxWidth()
-            .border(width = 1.dp, color = Color.Red, shape = RoundedCornerShape(8.dp))
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+            .border(
+                width = 1.dp,
+                color = Color.Red,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .clip(RoundedCornerShape(8.dp))
+            .clickable {
+                onItemClick(uiModel, origin)
+            }
     ) {
-        Box(
+        Row(
             modifier = Modifier
-                .height(64.dp)
-                .width(64.dp)
-                .padding(start = 10.dp)
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(uiModel.image)
-                    .fallback(R.drawable.spacex_logo)
-                    .error(R.drawable.spacex_logo)
-                    .placeholder(R.drawable.spacex_logo)
-                    .build(),
-                contentDescription = null
-            )
+            Box(
+                modifier = Modifier
+                    .height(64.dp)
+                    .width(64.dp)
+                    .padding(start = 10.dp)
+            ) {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(uiModel.image)
+                        .fallback(R.drawable.spacex_logo)
+                        .error(R.drawable.spacex_logo)
+                        .placeholder(R.drawable.spacex_logo)
+                        .build(),
+                    contentDescription = null
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 20.dp)
+            ) {
+                Text(
+                    text = uiModel.name,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Black,
+                    maxLines = 1
+                )
+                Text(
+                    text = uiModel.date,
+                    fontSize = 16.sp
+                )
+                Text(
+                    text = uiModel.time,
+                    fontSize = 16.sp
+                )
+                Text(
+                    text = uiModel.statusText,
+                    color = uiModel.statusColor,
+                    fontSize = 16.sp
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .height(64.dp)
+                    .width(32.dp),
+                contentAlignment = Alignment.CenterStart,
+            ) {
+                Icon(
+                    imageVector = if (uiModel.bookmarked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    contentDescription = "Go to launch's details",
+                    modifier = Modifier.clickable {
+                        onBookmarkClicked(uiModel)
+                    }
+                )
+            }
         }
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 20.dp)
-        ) {
-            Text(
-                text = uiModel.name,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Black,
-                maxLines = 1
-            )
-            Text(
-                text = uiModel.date,
-                fontSize = 16.sp
-            )
-            Text(
-                text = uiModel.time,
-                fontSize = 16.sp
-            )
-            Text(
-                text = uiModel.statusText,
-                color = uiModel.statusColor,
-                fontSize = 16.sp
-            )
-        }
-        Box(
-            modifier = Modifier
-                .height(64.dp)
-                .width(32.dp)
-                .clickable {
-                    onItemClick(uiModel)
-                },
-            contentAlignment = Alignment.CenterStart,
-        ) {
-            Icon(
-                imageVector = Icons.Default.ArrowForward,
-                contentDescription = "Go to launch's details"
-            )
+        AnimatedVisibility(visible = uiModel.expanded) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.padding(8.dp)
+            ) {
+                Text(text = "Details:", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                Text(text = uiModel.details, fontSize = 16.sp)
+            }
         }
     }
 }
 
 @Composable
-fun LaunchesUi(launches: List<UiModel>) {
+fun LaunchesUi(
+    launches: List<UiModel>,
+    onItemClick: (UiModel, Origin) -> Unit,
+    onBookmarkClicked: (UiModel) -> Unit,
+    origin: Origin
+) {
     LazyColumn(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(all = 8.dp)
     ) {
         items(launches) { uiModel ->
-            LaunchItem(uiModel = uiModel) {
-                // todo navigate to launch detail screen
-            }
+            LaunchItem(
+                uiModel = uiModel,
+                onItemClick = onItemClick,
+                onBookmarkClicked = onBookmarkClicked,
+                origin
+            )
         }
     }
 }
