@@ -16,12 +16,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.skydoves.landscapist.glide.GlideImage
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 
 @Composable
 fun LaunchList(launches: List<UiModel>) {
@@ -56,10 +56,14 @@ fun LaunchItem(
                 .width(64.dp)
                 .padding(start = 10.dp)
         ) {
-            GlideImage(
-                imageModel = uiModel.image,
-                placeHolder = ImageBitmap.imageResource(id = R.drawable.spacex_logo),
-                error = ImageBitmap.imageResource(id = R.drawable.spacex_logo)
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(uiModel.image)
+                    .fallback(R.drawable.spacex_logo)
+                    .error(R.drawable.spacex_logo)
+                    .placeholder(R.drawable.spacex_logo)
+                    .build(),
+                contentDescription = null
             )
         }
         Column(

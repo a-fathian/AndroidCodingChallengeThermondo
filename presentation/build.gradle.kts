@@ -64,8 +64,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.coil.kt.compose)
-    implementation(libs.androidx.compose.runtime.livedata)
-    implementation(libs.glide)
+    implementation(libs.coil.kt)
 
     implementation(project(":domain"))
 

@@ -53,9 +53,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.compose.runtime)
-    implementation(platform(libs.compose.bom))
-    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.core.ktx)
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
