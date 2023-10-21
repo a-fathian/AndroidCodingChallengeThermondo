@@ -1,34 +1,69 @@
-# Android Coding Challenge
+# Project Title: Space Launches Viewer
 
-We appreciate you taking the time to participate and submit a coding challenge. 
-In the next step we would like you to implement a list of image dispaly feature with unit and/or integration tests
-that fetches data from [The SpaceX API](https://github.com/r-spacex/SpaceX-API/blob/master/docs/README.md) 
+An engaging, intuitive, and visually rich application that allows users to browse through various space launches. This Android application leverages modern technology stacks and architectural patterns, ensuring a robust, maintainable, and testable codebase.
 
-Below you will find a list of tasks and limitations
-required for completing the challenge.
+## Features
+
+- View Space Launches: Users can explore past and upcoming space launches. Detailed information, including the launch date, time, location, mission details, and visuals, if available, are neatly displayed.
+
+- Bookmarking: Users have the option to bookmark their favorite launches for quick access. This personal list is easily accessible within the app.
+
+- Live Updates: The application stays updated with real-time information on upcoming launches, ensuring users are always in the know.
+
+- Interactive UI: Users enjoy an interactive experience with aesthetic visual elements and an intuitive interface, ensuring information is not only easily accessible but also pleasant to navigate.
+
+## Technology Stack
+
+- Kotlin: The application is fully developed in Kotlin, ensuring a modern, concise, and safe codebase.
+
+- MVVM Architecture: The code follows the Model-View-ViewModel (MVVM) architectural pattern, allowing for a decoupled and easily testable codebase.
+
+- Android Jetpack Compose: The UI is built using Jetpack Compose, the modern toolkit for building native UIs on Android, which allows for less boilerplate code and a powerful yet straightforward way to build interactive UIs.
+
+- Hilt-Dagger: Dependency injection is handled by Hilt, making the code more modular and testing more convenient.
+
+- Coil: For image loading, the project utilizes the power of Coil, making it easier to load, cache, and display images from various sources.
+
+- Retrofit: Handling REST API interactions through Retrofit, ensuring efficient network operations.
+
+## Getting Started
+
+To set up this project locally for development purposes, follow these steps:
+
+1. Clone the repository:
 
 
-### Application:
-
-* Users can see space x detailed launches information
-* Users can see description of the launches.
-* Users can bookmark any launches and view them later.(Don't worry about sending the information to the cloud, saving it locally is good)
-
-### Important:
-
-* test accordingly
-* use Jetpack Compose
-* Documentation of technical decisions you make during the challenge. 
-* The API implementation and the architecture of the code is completely up to you.
+sh
+git clone https://github.com/your_username/space-launches-viewer.git
 
 
-### What if I don't finish?
 
-Try to produce something that is at least minimally functional. Part of the exercise is to see what you prioritize first
-when you have a limited amount of time. For any unfinished tasks, please add comments to your code with a
-short explanation. You will be given an opportunity later to go into more detail and explain how you would go about
-finishing those tasks.
+2. Open the project in Android Studio or your preferred IDE.
 
+3. Run the application on an emulator or physical device connected to your development machine.
 
-Have fun! that is the most important thing!
-Looking forward to your submission!
+## Contribution
+
+Contributions are what make the open-source community such a fantastic place to learn, inspire, and create. Any contributions to this project are greatly appreciated.
+
+1. Fork the project.
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`).
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
+4. Push to the branch (`git push origin feature/AmazingFeature`).
+5. Open a pull request.
+
+## License
+
+Distributed under the MIT License. See
+LICENSE
+for more information.
+
+## Contact
+
+Ali Fathian - fathian.ali@gmail.com
+
+Project Link: [https://github.com/a-fathian/AndroidCodingChallengeThermondo](https://github.com/a-fathian/AndroidCodingChallengeThermondo)
+
+---
+
+This documentation provides an overview of the project and basic setup instructions. It is intended to help developers understand the purpose of the project, its high-level functionality, and how to get started with development. The contribution section encourages community involvement.
