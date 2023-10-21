@@ -1,10 +1,10 @@
 package ali.fathian.data.repository
 
 import ali.fathian.data.remote.api.ApiService
-import ali.fathian.data.remote.dto.Launch
-import ali.fathian.domain.DomainLaunchModel
+import ali.fathian.data.remote.dto.mapper.toDomainLaunchModel
 import ali.fathian.domain.LaunchRepository
 import ali.fathian.domain.common.Resource
+import ali.fathian.domain.model.DomainLaunchModel
 import javax.inject.Inject
 
 class DefaultLaunchRepository @Inject constructor(
@@ -22,9 +22,3 @@ class DefaultLaunchRepository @Inject constructor(
     }
 }
 
-fun Launch.toDomainLaunchModel(): DomainLaunchModel {
-    return DomainLaunchModel(
-        name = name,
-        id = id
-    )
-}

@@ -25,6 +25,7 @@ turbine = "0.12.1"
 appcompat = "1.6.1"
 material = "1.10.0"
 annotation = "1.6.0"
+glide = "1.4.8"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -80,6 +81,7 @@ turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
+glide = { group = "com.github.skydoves", name = "landscapist-glide", version.ref = "glide"}
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
