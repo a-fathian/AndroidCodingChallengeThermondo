@@ -2,6 +2,7 @@ package ali.fathian.presentation.launch
 
 import ali.fathian.domain.common.Resource
 import ali.fathian.domain.model.DomainLaunchModel
+import ali.fathian.domain.use_cases.BookmarksUseCase
 import ali.fathian.domain.use_cases.GetAllLaunchesUseCase
 import ali.fathian.presentation.BaseTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,10 +21,11 @@ class LaunchesViewModelTest : BaseTest() {
     private lateinit var viewModel: LaunchesViewModel
 
     private val getAllLaunchesUseCase = mock<GetAllLaunchesUseCase>()
+    private val bookmarksUseCase = mock<BookmarksUseCase>()
 
     @Before
     fun setUp() {
-        viewModel = LaunchesViewModel(getAllLaunchesUseCase, mockDispatcher.io())
+        viewModel = LaunchesViewModel(getAllLaunchesUseCase, bookmarksUseCase, mockDispatcher.io())
     }
 
     @Test

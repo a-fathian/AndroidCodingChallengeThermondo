@@ -1,6 +1,7 @@
 package ali.fathian.data.repository
 
 import ali.fathian.data.BaseTest
+import ali.fathian.data.local.LaunchDao
 import ali.fathian.data.remote.api.ApiService
 import ali.fathian.data.remote.dto.Launch
 import ali.fathian.data.remote.dto.mapper.toDomainLaunchModel
@@ -18,6 +19,7 @@ import retrofit2.Response
 class DefaultLaunchRepositoryTest : BaseTest() {
 
     private val apiService = mock<ApiService>()
+    private val launchDao = mock<LaunchDao>()
 
     @Test
     fun `getAllLaunches returns success resource when response is successful`() = runTest {
@@ -28,7 +30,7 @@ class DefaultLaunchRepositoryTest : BaseTest() {
             onBlocking { getAllLaunches() } doReturn apiResponse
         }
         // Act
-        val result = DefaultLaunchRepository(apiService).getAllLaunches()
+        val result = DefaultLaunchRepository(apiService, launchDao).getAllLaunches()
 
         // Assert
         Assert.assertTrue(result is Resource.Success)
@@ -49,7 +51,7 @@ class DefaultLaunchRepositoryTest : BaseTest() {
                 onBlocking { getAllLaunches() } doReturn apiResponse
             }
             // Act
-            val result = DefaultLaunchRepository(apiService).getAllLaunches()
+            val result = DefaultLaunchRepository(apiService, launchDao).getAllLaunches()
 
             // Assert
             Assert.assertTrue(result is Resource.Success)
@@ -67,7 +69,7 @@ class DefaultLaunchRepositoryTest : BaseTest() {
             onBlocking { getAllLaunches() } doThrow MockitoException(errorMessage)
         }
         // Act
-        val result = DefaultLaunchRepository(apiService).getAllLaunches()
+        val result = DefaultLaunchRepository(apiService, launchDao).getAllLaunches()
 
         // Assert
         Assert.assertTrue(result is Resource.Error)
