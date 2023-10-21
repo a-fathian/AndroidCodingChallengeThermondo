@@ -1,12 +1,14 @@
 package ali.fathian.presentation.model
 
+import androidx.compose.ui.graphics.Color
+
 data class UiModel(
     val image: String,
     val name: String,
     val date: String,
     val time: String,
-    val upcoming: Boolean,
-    val success: Boolean
+    val statusText: String,
+    val statusColor: Color
 )
 
 

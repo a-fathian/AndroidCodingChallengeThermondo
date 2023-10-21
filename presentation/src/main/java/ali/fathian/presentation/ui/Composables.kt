@@ -81,31 +81,11 @@ fun LaunchItem(
                 text = uiModel.time,
                 fontSize = 16.sp
             )
-            when {
-                uiModel.upcoming -> {
-                    Text(
-                        text = "Upcoming",
-                        color = Color.Blue,
-                        fontSize = 16.sp
-                    )
-                }
-
-                uiModel.success -> {
-                    Text(
-                        text = "Successful",
-                        color = Color.Green,
-                        fontSize = 16.sp
-                    )
-                }
-
-                else -> {
-                    Text(
-                        text = "Failure",
-                        color = Color.Red,
-                        fontSize = 16.sp
-                    )
-                }
-            }
+            Text(
+                text = uiModel.statusText,
+                color = uiModel.statusColor,
+                fontSize = 16.sp
+            )
         }
         Box(
             modifier = Modifier

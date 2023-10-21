@@ -9,7 +9,7 @@ fun Launch.toDomainLaunchModel(): DomainLaunchModel {
         image = links?.patch?.small,
         name = name,
         date = date,
-        time = time,
+        time = time.substringBeforeLast("."),
         upcoming = upcoming ?: false,
         success = success ?: false,
         id = id
