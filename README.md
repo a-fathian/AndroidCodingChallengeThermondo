@@ -34,7 +34,7 @@ To set up this project locally for development purposes, follow these steps:
 
 
 sh
-git clone https://github.com/your_username/space-launches-viewer.git
+git clone https://github.com/a-fathian/AndroidCodingChallengeThermondo.git
 
 
 
