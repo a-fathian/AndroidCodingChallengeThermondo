@@ -1,26 +1,20 @@
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    alias(libs.plugins.com.android.application)
+    alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.hilt)
     id("kotlin-kapt")
 }
 
 android {
-    namespace = "com.thermondo.androidchallenge"
-    compileSdk = 34
+    namespace = "ali.fathian.domain"
+    compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.thermondo.androidchallenge"
-        minSdk = 26
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -39,27 +33,15 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
 }
 
 dependencies {
-    implementation(libs.androidx.compose.runtime)
     implementation(platform(libs.compose.bom))
     implementation(libs.core.ktx)
+    implementation(libs.androidx.compose.runtime)
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
-    implementation(project(":domain"))
-    implementation(project(":data"))
-    implementation(project(":presentation"))
 
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.test.ext.junit)
 }
