@@ -1,4 +1,4 @@
-package ali.fathian.domain
+package ali.fathian.domain.repository
 
 import ali.fathian.domain.common.Resource
 import ali.fathian.domain.model.DomainLaunchModel

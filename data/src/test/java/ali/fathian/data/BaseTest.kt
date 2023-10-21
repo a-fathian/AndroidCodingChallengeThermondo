@@ -1,4 +1,4 @@
-package ali.fathian.data.repository
+package ali.fathian.data
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import kotlinx.coroutines.CoroutineDispatcher

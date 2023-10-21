@@ -1,6 +1,6 @@
 package ali.fathian.presentation.launch
 
-import ali.fathian.domain.GetAllLaunchesUseCase
+import ali.fathian.domain.use_cases.GetAllLaunchesUseCase
 import ali.fathian.domain.common.Resource
 import ali.fathian.presentation.common.DispatcherIO
 import ali.fathian.presentation.model.Launches

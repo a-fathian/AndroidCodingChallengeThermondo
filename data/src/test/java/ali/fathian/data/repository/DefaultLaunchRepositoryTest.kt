@@ -1,5 +1,6 @@
 package ali.fathian.data.repository
 
+import ali.fathian.data.BaseTest
 import ali.fathian.data.remote.api.ApiService
 import ali.fathian.data.remote.dto.Launch
 import ali.fathian.data.remote.dto.mapper.toDomainLaunchModel
@@ -20,6 +21,7 @@ class DefaultLaunchRepositoryTest : BaseTest() {
 
     @Test
     fun `getAllLaunches returns success resource when response is successful`() = runTest {
+        // Arrange (preparing the scenario)
         val launchResponse = getSuccessResponse()
         val apiResponse = Response.success(launchResponse)
         apiService.stub {
@@ -40,6 +42,7 @@ class DefaultLaunchRepositoryTest : BaseTest() {
     @Test
     fun `getAllLaunches returns success resource with empty list when response is successful but data is null`() =
         runTest {
+            // Arrange (preparing the scenario)
             val apiResponse = Response.success(null as List<Launch>?)
 
             apiService.stub {
@@ -57,6 +60,7 @@ class DefaultLaunchRepositoryTest : BaseTest() {
 
     @Test
     fun `getAllLaunches returns error resource when response is unsuccessful`() = runTest {
+        // Arrange (preparing the scenario)
         val errorMessage = "Check your internet connection"
 
         apiService.stub {

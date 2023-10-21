@@ -3,7 +3,7 @@ package ali.fathian.data.di
 import ali.fathian.data.common.Constants.BASE_URL
 import ali.fathian.data.remote.api.ApiService
 import ali.fathian.data.repository.DefaultLaunchRepository
-import ali.fathian.domain.LaunchRepository
+import ali.fathian.domain.repository.LaunchRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

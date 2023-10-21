@@ -1,7 +1,9 @@
-package ali.fathian.domain
+package ali.fathian.domain.use_cases
 
+import ali.fathian.domain.BaseTest
 import ali.fathian.domain.common.Resource
 import ali.fathian.domain.model.DomainLaunchModel
+import ali.fathian.domain.repository.LaunchRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals

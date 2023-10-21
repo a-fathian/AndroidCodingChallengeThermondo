@@ -1,5 +1,6 @@
-package ali.fathian.domain
+package ali.fathian.domain.use_cases
 
+import ali.fathian.domain.repository.LaunchRepository
 import javax.inject.Inject
 
 class GetAllLaunchesUseCase @Inject constructor(

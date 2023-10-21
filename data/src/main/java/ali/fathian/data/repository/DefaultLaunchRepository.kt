@@ -2,9 +2,9 @@ package ali.fathian.data.repository
 
 import ali.fathian.data.remote.api.ApiService
 import ali.fathian.data.remote.dto.mapper.toDomainLaunchModel
-import ali.fathian.domain.LaunchRepository
 import ali.fathian.domain.common.Resource
 import ali.fathian.domain.model.DomainLaunchModel
+import ali.fathian.domain.repository.LaunchRepository
 import javax.inject.Inject
 
 class DefaultLaunchRepository @Inject constructor(
