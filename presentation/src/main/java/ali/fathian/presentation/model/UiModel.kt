@@ -11,4 +11,10 @@ data class UiModel(
     val statusColor: Color
 )
 
+data class Launches(
+    val allLaunches: List<UiModel> = emptyList(),
+    val upcomingLaunches: List<UiModel> = emptyList(),
+    val pastLaunches: List<UiModel> = emptyList()
+)
+
 

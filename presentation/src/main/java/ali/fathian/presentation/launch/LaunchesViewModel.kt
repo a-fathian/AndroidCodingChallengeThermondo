@@ -3,10 +3,10 @@ package ali.fathian.presentation.launch
 import ali.fathian.domain.GetAllLaunchesUseCase
 import ali.fathian.domain.common.Resource
 import ali.fathian.presentation.common.DispatcherIO
-import ali.fathian.presentation.model.UiModel
+import ali.fathian.presentation.model.Launches
 import ali.fathian.presentation.model.mapper.toUiModel
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,8 +20,8 @@ class LaunchesViewModel @Inject constructor(
     @DispatcherIO private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
-    private val _uiState = mutableStateListOf<UiModel>()
-    val uiState: SnapshotStateList<UiModel> = _uiState
+    private val _uiState = mutableStateOf(Launches())
+    val uiState: State<Launches> = _uiState
 
 //    private val loading
 
@@ -29,7 +29,18 @@ class LaunchesViewModel @Inject constructor(
         viewModelScope.launch(dispatcher) {
             val launches = launchUseCase()
             if (launches is Resource.Success) {
-                _uiState.addAll(launches.data?.map { it.toUiModel() } ?: emptyList())
+                launches.data?.let {
+                    _uiState.value =
+                        Launches(
+                            allLaunches = it.map { item -> item.toUiModel() },
+                            upcomingLaunches = it.filter { item ->
+                                item.upcoming
+                            }.map { item -> item.toUiModel() },
+                            pastLaunches = it.filter { item ->
+                                !item.upcoming
+                            }.map { item -> item.toUiModel() }
+                        )
+                }
             }
         }
     }
