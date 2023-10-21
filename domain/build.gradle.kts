@@ -40,5 +40,13 @@ dependencies {
     kapt(libs.hilt.compiler)
 
     testImplementation(libs.junit)
+
+    testImplementation(libs.testing.assertj)
+    testImplementation(libs.kotlin.test.assertions)
+    testImplementation(libs.testing.mockito.core)
+    testImplementation(libs.testing.mockito.kotlin)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.androidx.arch.core.test)
+
     androidTestImplementation(libs.androidx.test.ext.junit)
 }

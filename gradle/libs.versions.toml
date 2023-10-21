@@ -25,6 +25,11 @@ turbine = "0.12.1"
 appcompat = "1.6.1"
 material = "1.10.0"
 annotation = "1.6.0"
+testingAssertJ = "1.2.0"
+testingMockitoMain = "3.5.13"
+testingMockitoKotlin = "4.0.0"
+kotlinTest = "4.2.0"
+androidXArch = "2.1.0"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -80,6 +85,11 @@ turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
+testing-assertj = { group = "com.squareup.assertj", name = "assertj-android", version.ref = "testingAssertJ" }
+testing-mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "testingMockitoMain" }
+testing-mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "testingMockitoKotlin" }
+kotlin-test-assertions = { group = "io.kotest", name = "kotest-assertions-core-jvm", version.ref = "kotlinTest" }
+androidx-arch-core-test = { group = "androidx.arch.core", name = "core-testing", version.ref = "androidXArch" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
