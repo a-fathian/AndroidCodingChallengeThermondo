@@ -6,28 +6,36 @@ import ali.fathian.presentation.ui.theme.AndroidCodingChallengeTheme
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    private val viewModel: LaunchesViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             AndroidCodingChallengeTheme {
-                val viewModel: LaunchesViewModel = hiltViewModel()
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LaunchList(viewModel.uiState.value)
+                    LaunchList(viewModel.uiState.value) {
+                        viewModel.fetchLaunches()
+                    }
                 }
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.fetchLaunches()
     }
 }

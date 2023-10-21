@@ -1,7 +1,7 @@
 package ali.fathian.presentation.launch
 
-import ali.fathian.domain.use_cases.GetAllLaunchesUseCase
 import ali.fathian.domain.common.Resource
+import ali.fathian.domain.use_cases.GetAllLaunchesUseCase
 import ali.fathian.presentation.common.DispatcherIO
 import ali.fathian.presentation.model.Launches
 import ali.fathian.presentation.model.mapper.toUiModel
@@ -23,10 +23,9 @@ class LaunchesViewModel @Inject constructor(
     private val _uiState = mutableStateOf(Launches())
     val uiState: State<Launches> = _uiState
 
-//    private val loading
-
-    init {
+    fun fetchLaunches() {
         viewModelScope.launch(dispatcher) {
+            _uiState.value = uiState.value.copy(loading = true)
             val launches = launchUseCase()
             if (launches is Resource.Success) {
                 launches.data?.let {
@@ -38,9 +37,14 @@ class LaunchesViewModel @Inject constructor(
                             }.map { item -> item.toUiModel() },
                             pastLaunches = it.filter { item ->
                                 !item.upcoming
-                            }.map { item -> item.toUiModel() }
+                            }.map { item -> item.toUiModel() },
+                            errorMessage = "",
+                            loading = false
                         )
                 }
+            } else {
+                _uiState.value =
+                    Launches(errorMessage = launches.message ?: "Unknown Error", loading = false)
             }
         }
     }

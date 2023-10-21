@@ -69,11 +69,14 @@ dependencies {
     implementation(project(":domain"))
 
     testImplementation(libs.junit)
+
+    testImplementation(libs.testing.assertj)
+    testImplementation(libs.kotlin.test.assertions)
+    testImplementation(libs.testing.mockito.core)
+    testImplementation(libs.testing.mockito.kotlin)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.androidx.arch.core.test)
+
     androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
-    androidTestImplementation(platform(libs.compose.bom))
-    androidTestImplementation(libs.ui.test.junit4)
-    debugImplementation(libs.ui.tooling)
-    debugImplementation(libs.ui.test.manifest)
 
 }

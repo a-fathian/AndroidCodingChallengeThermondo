@@ -14,7 +14,9 @@ data class UiModel(
 data class Launches(
     val allLaunches: List<UiModel> = emptyList(),
     val upcomingLaunches: List<UiModel> = emptyList(),
-    val pastLaunches: List<UiModel> = emptyList()
+    val pastLaunches: List<UiModel> = emptyList(),
+    val errorMessage: String = "",
+    val loading: Boolean = false
 )
 
 
