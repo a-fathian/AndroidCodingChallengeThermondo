@@ -53,11 +53,11 @@ android {
 }
 
 dependencies {
+    implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.core.ktx)
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":presentation"))
-
 }

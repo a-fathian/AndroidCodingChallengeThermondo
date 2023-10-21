@@ -12,12 +12,16 @@ class DefaultLaunchRepository @Inject constructor(
 ) : LaunchRepository {
 
     override suspend fun getAllLaunches(): Resource<List<DomainLaunchModel>> {
-        val response = apiService.getAllLaunches()
-        return if (response.isSuccessful) {
-            val launches = response.body()?.map { it.toDomainLaunchModel() }
-            Resource.Success(launches ?: emptyList())
-        } else {
-            Resource.Error(message = response.message() ?: "Unknown Error")
+        return try {
+            val response = apiService.getAllLaunches()
+            if (response.isSuccessful) {
+                val launches = response.body()?.map { it.toDomainLaunchModel() }
+                Resource.Success(launches ?: emptyList())
+            } else {
+                Resource.Error(message = response.message() ?: "Unknown Error")
+            }
+        } catch (e: Exception) {
+            Resource.Error(message = "Check your internet connection")
         }
     }
 }
