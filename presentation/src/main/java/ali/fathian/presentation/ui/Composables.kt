@@ -35,7 +35,7 @@ import coil.request.ImageRequest
 @Composable
 fun LaunchList(
     launches: Launches,
-    bookmarks: List<UiModel>,
+    bookmarks: State<List<UiModel>?>,
     onRetryClick: () -> Unit,
     onItemClick: (UiModel, Origin) -> Unit,
     onBookmarkClicked: (UiModel) -> Unit
@@ -60,7 +60,14 @@ fun LaunchList(
                             selectedBottomBarIndex = index
                         },
                         icon = {
-                            Icon(imageVector = Icons.Default.Home, contentDescription = "Launches")
+                            if (index == 0) {
+                                Icon(imageVector = Icons.Default.Home, contentDescription = item)
+                            } else {
+                                Icon(
+                                    imageVector = Icons.Default.Favorite,
+                                    contentDescription = item
+                                )
+                            }
                         },
                         label = {
                             Text(text = item)
@@ -95,16 +102,18 @@ fun LaunchList(
 @Composable
 fun Bookmarks(
     paddingValues: PaddingValues,
-    bookmarks: List<UiModel>,
+    bookmarks: State<List<UiModel>?>,
     onItemClick: (UiModel, Origin) -> Unit,
     onBookmarkClicked: (UiModel) -> Unit
 ) {
     LazyColumn(
-        modifier = Modifier.fillMaxSize().padding(bottom = paddingValues.calculateBottomPadding()),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = paddingValues.calculateBottomPadding()),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(all = 8.dp)
     ) {
-        items(bookmarks) { uiModel ->
+        items(bookmarks.value ?: emptyList()) { uiModel ->
             LaunchItem(
                 uiModel = uiModel,
                 onItemClick = onItemClick,

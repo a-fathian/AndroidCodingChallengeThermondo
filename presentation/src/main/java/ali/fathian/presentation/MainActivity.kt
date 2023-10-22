@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.runtime.collectAsState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,7 +21,7 @@ class MainActivity : ComponentActivity() {
             AndroidCodingChallengeTheme {
                 LaunchList(
                     viewModel.uiState.value,
-                    viewModel.bookmarks.value ?: emptyList(),
+                    viewModel.bookmarks.collectAsState(),
                     onRetryClick = viewModel::fetchLaunches,
                     onItemClick = viewModel::onItemClick,
                     onBookmarkClicked = viewModel::onBookmarkClicked
@@ -32,6 +33,5 @@ class MainActivity : ComponentActivity() {
     override fun onStart() {
         super.onStart()
         viewModel.fetchLaunches()
-        viewModel.fetchBookmarks()
     }
 }

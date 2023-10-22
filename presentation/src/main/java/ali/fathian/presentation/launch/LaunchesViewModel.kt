@@ -34,7 +34,11 @@ class LaunchesViewModel @Inject constructor(
     private val _bookmarks = MutableStateFlow<List<UiModel>?>(null)
     val bookmarks = _bookmarks.asStateFlow()
 
-    fun fetchBookmarks() {
+    init {
+        fetchBookmarks()
+    }
+
+    private fun fetchBookmarks() {
         viewModelScope.launch(dispatcher) {
             bookmarksUseCase.getLocalLaunches().collect {
                 Log.d("fetchBookmarks", "fetchBookmarks: ${it.size}")
