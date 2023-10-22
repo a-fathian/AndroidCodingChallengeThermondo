@@ -8,6 +8,8 @@ data class UiModel(
     val date: String = "",
     val time: String = "",
     val details: String = "",
+    val upcoming: Boolean = false,
+    val success: Boolean = false,
     val statusText: String = "",
     val statusColor: Color = Color.Transparent,
     var expanded: Boolean = false,

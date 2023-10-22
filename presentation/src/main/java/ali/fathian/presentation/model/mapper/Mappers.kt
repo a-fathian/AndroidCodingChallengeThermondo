@@ -12,6 +12,8 @@ fun DomainLaunchModel.toUiModel(): UiModel {
         time = time ?: "",
         details = details ?: "No Details",
         bookmarked = bookmarked,
+        upcoming = upcoming,
+        success = success,
         statusText = if (upcoming) "Upcoming" else if (success) "Success" else "Failure",
         statusColor = if (upcoming) Color.Blue else if (success) Color.Green else Color.Red,
         id = id ?: ""
@@ -25,6 +27,9 @@ fun UiModel.toDomainModel(): DomainLaunchModel {
         date = date,
         time = time,
         details = details,
-        id = id
+        id = id,
+        upcoming = upcoming,
+        success = success,
+        bookmarked = bookmarked
     )
 }

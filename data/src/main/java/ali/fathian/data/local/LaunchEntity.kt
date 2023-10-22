@@ -12,6 +12,6 @@ data class LaunchEntity(
     val details: String? = null,
     val upcoming: Boolean = false,
     val success: Boolean = false,
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0
+    @PrimaryKey(autoGenerate = false)
+    val id: String = ""
 )
