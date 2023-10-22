@@ -5,7 +5,9 @@ import ali.fathian.domain.model.DomainLaunchModel
 import ali.fathian.domain.use_cases.BookmarksUseCase
 import ali.fathian.domain.use_cases.GetAllLaunchesUseCase
 import ali.fathian.presentation.BaseTest
+import app.cash.turbine.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -21,7 +23,9 @@ class LaunchesViewModelTest : BaseTest() {
     private lateinit var viewModel: LaunchesViewModel
 
     private val getAllLaunchesUseCase = mock<GetAllLaunchesUseCase>()
-    private val bookmarksUseCase = mock<BookmarksUseCase>()
+    private val bookmarksUseCase = mock<BookmarksUseCase>().stub {
+        onBlocking { getLocalLaunches() } doReturn flowOf(emptyList())
+    }
 
     @Before
     fun setUp() {
@@ -34,29 +38,26 @@ class LaunchesViewModelTest : BaseTest() {
         getAllLaunchesUseCase.stub {
             onBlocking { invoke() } doReturn expectedLaunches
         }
-
         viewModel.fetchLaunches()
-
-        val launches = viewModel.uiState.value
-
-        assertTrue(launches.errorMessage.isEmpty())
-        assertEquals(1, launches.allLaunches.size)
-        assertEquals(expectedLaunches.data?.get(0)?.name, launches.allLaunches[0].name)
+        viewModel.uiState.test {
+            val launches = awaitItem()
+            assertTrue(launches.errorMessage.isEmpty())
+            assertEquals(1, launches.allLaunches.size)
+            assertEquals(expectedLaunches.data?.get(0)?.name, launches.allLaunches[0].name)
+        }
     }
 
     @Test
     fun `fetchLaunches error updates uiState with error message`() = runTest {
-
         getAllLaunchesUseCase.stub {
             onBlocking { invoke() } doReturn Resource.Error("Error")
         }
-
         viewModel.fetchLaunches()
-
-        val launches = viewModel.uiState.value
-
-        assertTrue(launches.errorMessage.isNotEmpty())
-        assertEquals("Error", launches.errorMessage)
+        viewModel.uiState.test {
+            val launches = awaitItem()
+            assertTrue(launches.errorMessage.isNotEmpty())
+            assertEquals("Error", launches.errorMessage)
+        }
     }
 
     private fun getLaunchesList(): Resource<List<DomainLaunchModel>> {

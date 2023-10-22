@@ -65,7 +65,7 @@ class LaunchesViewModel @Inject constructor(
                 }
             } else {
                 _uiState.emit(
-                    Launches(errorMessage = launches.message ?: "Unknown Error", loading = false)
+                    uiState.value.copy(errorMessage = launches.message ?: "Unknown Error", loading = false)
                 )
             }
         }
@@ -86,119 +86,49 @@ class LaunchesViewModel @Inject constructor(
                     allLaunches = list,
                     upcomingLaunches = list.filter { it.upcoming },
                     pastLaunches = list.filter { !it.upcoming },
-                    errorMessage = "",
-                    loading = allLaunches.isEmpty()
                 )
             )
         }
     }
 
     fun onItemClick(uiModel: UiModel, origin: Origin) {
+        // Determine the list to be manipulated based on the origin
+        val currentList = when (origin) {
+            Origin.AllLaunches -> _uiState.value.allLaunches
+            Origin.BookmarkLaunches -> _bookmarks.value ?: emptyList()
+            Origin.PastLaunches -> _uiState.value.pastLaunches
+            Origin.UpcomingLaunches -> _uiState.value.upcomingLaunches
+        }
+
+        // Find the items we are going to collapse/expand
+        val previousExpandedItem = currentList.find { it.expanded }
+        val currentItemIndex = currentList.indexOf(uiModel)
+
+        // If we didn't find the current item, there's nothing we can do
+        if (currentItemIndex == -1) return
+
+        // Create a new list with updated items
+        val updatedList = currentList.mapIndexed { index, item ->
+            when {
+                // Collapse the previous expanded item if it exists
+                previousExpandedItem == item -> item.copy(expanded = false)
+                // Expand the current item
+                index == currentItemIndex -> item.copy(expanded =
+                !item.expanded) // Toggle the current item
+                // Leave all other items unmodified
+                else -> item
+            }
+        }
+
+        // Update the state with the new list
         when (origin) {
-            Origin.AllLaunches -> {
-                val previousExpandedItem = _uiState.value.allLaunches.find { it.expanded }
-                if (uiModel != previousExpandedItem) {
-                    val allLaunches = uiState.value.allLaunches
-                    val newUiModel = allLaunches[allLaunches.indexOf(uiModel)].copy(expanded = true)
-                    val newAllLaunches = allLaunches.toMutableList().apply {
-                        replaceIf(newUiModel) {
-                            newUiModel.id == it.id
-                        }
-                    }
-                    _uiState.value = uiState.value.copy(allLaunches = newAllLaunches)
-                }
-                if (previousExpandedItem != null) {
-                    val allLaunches = uiState.value.allLaunches
-                    val newUiModel =
-                        allLaunches[allLaunches.indexOf(previousExpandedItem)].copy(expanded = false)
-                    val newAllLaunches = allLaunches.toMutableList().apply {
-                        replaceIf(newUiModel) {
-                            newUiModel.id == it.id
-                        }
-                    }
-                    _uiState.value = uiState.value.copy(allLaunches = newAllLaunches)
-                }
-            }
-
-            Origin.BookmarkLaunches -> {
-                val previousExpandedItem = _bookmarks.value?.find { it.expanded }
-                if (uiModel != previousExpandedItem) {
-                    val allBookmarks = bookmarks.value ?: emptyList()
-                    val newUiModel =
-                        allBookmarks[allBookmarks.indexOf(uiModel)].copy(expanded = true)
-                    val newAllBookmarks = allBookmarks.toMutableList().apply {
-                        replaceIf(newUiModel) {
-                            newUiModel.id == it.id
-                        }
-                    }
-                    _bookmarks.value = newAllBookmarks
-                }
-                if (previousExpandedItem != null) {
-                    val allBookmarks = bookmarks.value ?: emptyList()
-                    val newUiModel =
-                        allBookmarks[allBookmarks.indexOf(uiModel)].copy(expanded = false)
-                    val newAllBookmarks = allBookmarks.toMutableList().apply {
-                        replaceIf(newUiModel) {
-                            newUiModel.id == it.id
-                        }
-                    }
-                    _bookmarks.value = newAllBookmarks
-                }
-            }
-
-            Origin.PastLaunches -> {
-                val previousExpandedItem = _uiState.value.pastLaunches.find { it.expanded }
-                if (uiModel != previousExpandedItem) {
-                    val pastLaunches = uiState.value.allLaunches
-                    val newUiModel =
-                        pastLaunches[pastLaunches.indexOf(uiModel)].copy(expanded = true)
-                    val newPastLaunches = pastLaunches.toMutableList().apply {
-                        replaceIf(newUiModel) {
-                            newUiModel.id == it.id
-                        }
-                    }
-                    _uiState.value = uiState.value.copy(pastLaunches = newPastLaunches)
-                }
-                if (previousExpandedItem != null) {
-                    val pastLaunches = uiState.value.allLaunches
-                    val newUiModel =
-                        pastLaunches[pastLaunches.indexOf(previousExpandedItem)].copy(expanded = false)
-                    val newPastLaunches = pastLaunches.toMutableList().apply {
-                        replaceIf(newUiModel) {
-                            newUiModel.id == it.id
-                        }
-                    }
-                    _uiState.value = uiState.value.copy(pastLaunches = newPastLaunches)
-                }
-            }
-
-            Origin.UpcomingLaunches -> {
-                val previousExpandedItem = _uiState.value.upcomingLaunches.find { it.expanded }
-                if (uiModel != previousExpandedItem) {
-                    val upcomingLaunches = uiState.value.allLaunches
-                    val newUiModel =
-                        upcomingLaunches[upcomingLaunches.indexOf(uiModel)].copy(expanded = true)
-                    val newUpcomingLaunches = upcomingLaunches.toMutableList().apply {
-                        replaceIf(newUiModel) {
-                            newUiModel.id == it.id
-                        }
-                    }
-                    _uiState.value = uiState.value.copy(upcomingLaunches = newUpcomingLaunches)
-                }
-                if (previousExpandedItem != null) {
-                    val upcomingLaunches = uiState.value.allLaunches
-                    val newUiModel =
-                        upcomingLaunches[upcomingLaunches.indexOf(previousExpandedItem)].copy(
-                            expanded = false
-                        )
-                    val newUpcomingLaunches = upcomingLaunches.toMutableList().apply {
-                        replaceIf(newUiModel) {
-                            newUiModel.id == it.id
-                        }
-                    }
-                    _uiState.value = uiState.value.copy(upcomingLaunches = newUpcomingLaunches)
-                }
-            }
+            Origin.AllLaunches -> _uiState.value =
+                _uiState.value.copy(allLaunches = updatedList)
+            Origin.BookmarkLaunches -> _bookmarks.value = updatedList
+            Origin.PastLaunches -> _uiState.value =
+                _uiState.value.copy(pastLaunches = updatedList)
+            Origin.UpcomingLaunches -> _uiState.value =
+                _uiState.value.copy(upcomingLaunches = updatedList)
         }
     }
 
