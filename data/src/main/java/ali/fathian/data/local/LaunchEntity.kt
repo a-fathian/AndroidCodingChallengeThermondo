@@ -11,6 +11,7 @@ data class LaunchEntity(
     val time: String? = null,
     val details: String? = null,
     val upcoming: Boolean = false,
+    val bookmarked: Boolean = false,
     val success: Boolean = false,
     @PrimaryKey(autoGenerate = false)
     val id: String = ""

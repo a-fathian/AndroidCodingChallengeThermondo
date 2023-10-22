@@ -35,7 +35,7 @@ import coil.request.ImageRequest
 @Composable
 fun LaunchList(
     launches: Launches,
-    bookmarks: State<List<UiModel>?>,
+    bookmarks: List<UiModel>?,
     onRetryClick: () -> Unit,
     onItemClick: (UiModel, Origin) -> Unit,
     onBookmarkClicked: (UiModel) -> Unit
@@ -102,7 +102,7 @@ fun LaunchList(
 @Composable
 fun Bookmarks(
     paddingValues: PaddingValues,
-    bookmarks: State<List<UiModel>?>,
+    bookmarks: List<UiModel>?,
     onItemClick: (UiModel, Origin) -> Unit,
     onBookmarkClicked: (UiModel) -> Unit
 ) {
@@ -113,7 +113,7 @@ fun Bookmarks(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(all = 8.dp)
     ) {
-        items(bookmarks.value ?: emptyList()) { uiModel ->
+        items(bookmarks ?: emptyList()) { uiModel ->
             LaunchItem(
                 uiModel = uiModel,
                 onItemClick = onItemClick,
@@ -179,6 +179,42 @@ private fun Home(
                     onBookmarkClicked = onBookmarkClicked,
                     origin = Origin.PastLaunches
                 )
+            }
+        }
+    }
+}
+
+@Composable
+fun LaunchesUi(
+    launches: List<UiModel>,
+    onItemClick: (UiModel, Origin) -> Unit,
+    onBookmarkClicked: (UiModel) -> Unit,
+    origin: Origin
+) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(all = 8.dp)
+    ) {
+        items(launches) { uiModel ->
+            LaunchItem(
+                uiModel = uiModel,
+                onItemClick = onItemClick,
+                onBookmarkClicked = onBookmarkClicked,
+                origin
+            )
+        }
+    }
+}
+
+@Composable
+fun ErrorMessageUi(message: String, onRetryClick: () -> Unit) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(text = message)
+            Spacer(modifier = Modifier.height(8.dp))
+            Button(onClick = { onRetryClick() }) {
+                Text(text = "Retry")
             }
         }
     }
@@ -274,42 +310,6 @@ fun LaunchItem(
             ) {
                 Text(text = "Details:", fontWeight = FontWeight.Bold, fontSize = 18.sp)
                 Text(text = uiModel.details, fontSize = 16.sp)
-            }
-        }
-    }
-}
-
-@Composable
-fun LaunchesUi(
-    launches: List<UiModel>,
-    onItemClick: (UiModel, Origin) -> Unit,
-    onBookmarkClicked: (UiModel) -> Unit,
-    origin: Origin
-) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(all = 8.dp)
-    ) {
-        items(launches) { uiModel ->
-            LaunchItem(
-                uiModel = uiModel,
-                onItemClick = onItemClick,
-                onBookmarkClicked = onBookmarkClicked,
-                origin
-            )
-        }
-    }
-}
-
-@Composable
-fun ErrorMessageUi(message: String, onRetryClick: () -> Unit) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = message)
-            Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = { onRetryClick() }) {
-                Text(text = "Retry")
             }
         }
     }

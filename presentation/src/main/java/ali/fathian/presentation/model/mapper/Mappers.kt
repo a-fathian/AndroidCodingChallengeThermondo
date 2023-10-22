@@ -16,7 +16,7 @@ fun DomainLaunchModel.toUiModel(): UiModel {
         success = success,
         statusText = if (upcoming) "Upcoming" else if (success) "Success" else "Failure",
         statusColor = if (upcoming) Color.Blue else if (success) Color.Green else Color.Red,
-        id = id ?: ""
+        id = id
     )
 }
 

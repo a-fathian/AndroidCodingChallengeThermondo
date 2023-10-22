@@ -9,5 +9,5 @@ data class DomainLaunchModel(
     val upcoming: Boolean = false,
     val success: Boolean = false,
     val bookmarked: Boolean = false,
-    val id: String? = null
+    val id: String = ""
 )

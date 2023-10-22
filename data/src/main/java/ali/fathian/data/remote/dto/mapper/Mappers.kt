@@ -26,6 +26,7 @@ fun LaunchEntity.toDomainModel(): DomainLaunchModel {
         time = time,
         details = details,
         upcoming = upcoming,
+        bookmarked = bookmarked,
         success = success,
         id = id
     )
@@ -39,7 +40,8 @@ fun DomainLaunchModel.toLaunchEntity(): LaunchEntity {
         time = time,
         details = details,
         upcoming = upcoming,
+        bookmarked = bookmarked,
         success = success,
-        id = id ?: ""
+        id = id
     )
 }

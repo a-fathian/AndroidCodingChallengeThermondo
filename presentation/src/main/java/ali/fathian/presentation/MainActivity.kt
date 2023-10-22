@@ -19,9 +19,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AndroidCodingChallengeTheme {
+                val bookmarks = viewModel.bookmarks.collectAsState().value
                 LaunchList(
-                    viewModel.uiState.value,
-                    viewModel.bookmarks.collectAsState(),
+                    viewModel.uiState.collectAsState().value,
+                    bookmarks,
                     onRetryClick = viewModel::fetchLaunches,
                     onItemClick = viewModel::onItemClick,
                     onBookmarkClicked = viewModel::onBookmarkClicked

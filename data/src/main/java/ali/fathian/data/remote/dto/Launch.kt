@@ -27,7 +27,7 @@ data class Launch(
     @SerializedName("date_precision") val datePrecision: String?,
     @SerializedName("upcoming") val upcoming: Boolean?,
     @SerializedName("cores") val cores: List<Core>?,
-    @SerializedName("id") val id: String?
+    @SerializedName("id") val id: String
 )
 
 data class Core(
