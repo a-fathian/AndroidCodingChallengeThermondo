@@ -52,12 +52,10 @@ class LaunchesViewModel @Inject constructor(
                     _uiState.value =
                         Launches(
                             allLaunches = it.map { item -> item.toUiModel() },
-                            upcomingLaunches = it.filter { item ->
-                                item.upcoming
-                            }.map { item -> item.toUiModel() },
-                            pastLaunches = it.filter { item ->
-                                !item.upcoming
-                            }.map { item -> item.toUiModel() },
+                            upcomingLaunches = it.map { item -> item.toUiModel() }
+                                .filter { item -> item.upcoming },
+                            pastLaunches = it.map { item -> item.toUiModel() }
+                                .filter { item -> !item.upcoming },
                             errorMessage = "",
                             loading = false
                         )
@@ -86,7 +84,6 @@ class LaunchesViewModel @Inject constructor(
             }
 
             Origin.BookmarkLaunches -> {
-
             }
 
             Origin.PastLaunches -> {
@@ -112,7 +109,8 @@ class LaunchesViewModel @Inject constructor(
                 }
                 if (previousExpandedItem != null) {
                     val upcomingLaunches = uiState.value.upcomingLaunches
-                    upcomingLaunches[upcomingLaunches.indexOf(previousExpandedItem)].expanded = false
+                    upcomingLaunches[upcomingLaunches.indexOf(previousExpandedItem)].expanded =
+                        false
                     _uiState.value = uiState.value.copy(upcomingLaunches = upcomingLaunches)
                 }
             }
